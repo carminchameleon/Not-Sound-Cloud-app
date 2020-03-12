@@ -1,19 +1,22 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import * as Font from "expo-font";
+import Welcome from "./src/screens/Welcome";
+import { AppLoading } from "expo";
+
+const getFonts = () =>
+  Font.loadAsync({
+    InterstateRegular: require("./src/assets/fonts/InterstateRegular.ttf"),
+    InterstateThin: require("./src/assets/fonts/InterstateThin.ttf")
+  });
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start w orking on your app!</Text>
-    </View>
-  );
-}
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+  if (fontsLoaded) {
+    return <Welcome />;
+  } else {
+    return (
+      <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} />
+    );
   }
-});
+}
