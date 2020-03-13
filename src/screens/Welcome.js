@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, modal } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  modal,
+  TouchableWithoutFeedback
+} from "react-native";
 import styled from "styled-components";
 import * as Font from "expo-font";
 import { addListener } from "expo/build/Updates/Updates";
@@ -10,6 +17,7 @@ export class Welcome extends Component {
     super(props);
     this.state = { modalVisible: false };
   }
+
   setModalVisible = visible => {
     this.setState({
       modalVisible: visible
@@ -39,6 +47,7 @@ export class Welcome extends Component {
               onPress={() => {
                 this.setModalVisible(!modalVisible);
               }}
+              onRequestClose={() => this.visibleModal(false)}
             >
               <SignUp>Create an account</SignUp>
             </SignUpBox>
@@ -55,7 +64,7 @@ export class Welcome extends Component {
           visible={modalVisible}
           onRequestClose={() => Alert.alert("modal has been closed")}
         >
-          <CreateAccount />
+          <CreateAccount setModalVisible={this.setModalVisible} />
         </SignUpModal>
       </Container>
     );
@@ -71,7 +80,6 @@ const Container = styled.View`
   align-items: center;
   margin: 0;
   font-family: "InterstateRegular";
-
   padding: 0;
   position: relative;
   background-color: black;
@@ -113,8 +121,8 @@ const Sentence = styled.Text`
 `;
 
 const ButtonBox = styled.View`
-  margin-top: 570;
-  margin-bottom: 0;
+  position: absolute;
+  top: 64%;
   width: 100%;
   height: 14%;
   display: flex;
