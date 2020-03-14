@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import SocialSignup from "../screens/SocialSignup";
 import { Ionicons } from "@expo/vector-icons";
-
 import {
   View,
   Text,
@@ -9,53 +8,93 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Button,
-  modal,
+  Modal,
   Alert,
   TextInput,
   TouchableNativeFeedbackBase
 } from "react-native";
+
 import styled from "styled-components";
 import { theme, flexCenter } from "../components/theme";
 
-function isEmail(asValue) {
-  var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-  return regExp.test(asValue); // 형식에 맞는 경우 true 리턴
+function checkEmail(address) {
+  var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+  if (exptext.test(address)) {
+    // 이메일 형식이 맞을 경우
+    return true;
+  } else {
+    return false;
+  }
 }
 
-const check_email = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+function checkPassword(PW) {
+  if (PW.length > 5) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 export class CreateAccount extends Component {
   constructor() {
     super();
     this.state = {
-      mailFocus: false,
+      focused: false,
       mail: "",
-      mailWarming: true
+      validEmail: false,
+      showEmailWarning: true,
+      password: "",
+      validPassword: false,
+      showPasswordWarning: true
     };
   }
-
+  // 클릭했을 때, 입력 창이 올라오게
   handlePosition = focus => {
-    this.setState({ mailFocus: focus });
+    this.setState({ focused: focus });
   };
 
+  ///내가 친 이메일과 그 이메일이 적합한지를 저장하는 함수
   handleEmail = email => {
-    console.log(email);
-    this.setState({ mail: email });
-    if (isEmail(email)) {
-      console.log("checked email");
-      this.setState({ mailWarming: false }); // 메일을 false로
+    this.setState({ mail: email, validEmail: checkEmail(email) });
+  };
+
+  checkMailWarning = () => {
+    if (this.state.validEmail) {
+      this.setState({ showEmailWarning: true });
+    } else {
+      this.setState({ showEmailWarning: false });
+    }
+  };
+
+  ///내가 친 이메일과 그 이메일이 적합한지를 저장하는 함수
+  handlePassword = PW => {
+    this.setState({ password: PW, validPassword: checkPassword(PW) });
+  };
+
+  checkPasswordWarning = () => {
+    if (this.state.validPassword) {
+      this.setState({ showPasswordWarning: true });
+    } else {
+      this.setState({ showPasswordWarning: false });
     }
   };
 
   render() {
     const { theme, flexCenter } = { theme, flexCenter };
-
+    const { setModalVisible } = this.props;
+    const {
+      focused,
+      validEmail,
+      showEmailWarning,
+      showPasswordWarning,
+      validPassword
+    } = this.state;
     return (
       <Wrapper>
         <Container>
           <HeaderContainer>
             <CancelContainer>
-              <CancelBox onPress={() => this.props.setModalVisible(false)}>
+              <CancelBox onPress={() => setModalVisible(false)}>
                 <Cancel>Cancel</Cancel>
               </CancelBox>
             </CancelContainer>
@@ -64,12 +103,16 @@ export class CreateAccount extends Component {
             </TitleBox>
             <NextContainer>
               <NextBox>
-                <Next>Next</Next>
+                {validEmail && validPassword ? (
+                  <GoNext>Next</GoNext>
+                ) : (
+                  <Next>Next</Next>
+                )}
               </NextBox>
             </NextContainer>
           </HeaderContainer>
           <BodyContainer>
-            {this.state.mailFocus ? <></> : <SocialSignup />}
+            {focused ? <></> : <SocialSignup />}
             <InputContainer>
               <EmailContainer>
                 <InputTitleBox>
@@ -79,6 +122,10 @@ export class CreateAccount extends Component {
                   <EmailInput
                     onFocus={() => {
                       this.handlePosition(true);
+                      this.setState({ showEmailWarning: true });
+                    }}
+                    onBlur={() => {
+                      this.checkMailWarning();
                     }}
                     onChangeText={val => {
                       this.handleEmail(val);
@@ -87,10 +134,10 @@ export class CreateAccount extends Component {
                     returnKeyType={"done"}
                     autoCorrect={false}
                   ></EmailInput>
-                  {this.state.mailWarming ? (
-                    <Warming>Please enter a valid email address</Warming>
-                  ) : (
+                  {showEmailWarning ? (
                     <></>
+                  ) : (
+                    <Warning>Please enter a valid email address</Warning>
                   )}
                 </InputContentsBox>
               </EmailContainer>
@@ -102,18 +149,45 @@ export class CreateAccount extends Component {
                   <PWInput
                     onFocus={() => {
                       this.handlePosition(true);
+                      this.setState({ showPasswordWarning: true });
                     }}
-                    onChangeText={() => {}}
+                    onBlur={() => {
+                      this.checkPasswordWarning();
+                    }}
+                    onChangeText={val => {
+                      this.handlePassword(val);
+                    }}
                     returnKeyType={"done"}
                     autoCorrect={false}
                     placeholder="Min 6 characters"
                   ></PWInput>
-                  <Warming>Please enter a valid password</Warming>
+                  {showPasswordWarning ? (
+                    <></>
+                  ) : (
+                    <Warning>Please enter a valid password</Warning>
+                  )}
                 </InputContentsBox>
               </PWContainer>
             </InputContainer>
+            <PolicyContainer>
+              <PolicyBox>
+                <Policy>
+                  We may use your email and devices for updates and tips on
+                  SoundCloud's products and services, and for activities
+                  notifications. You can unsubscribe for free at any time in
+                  your notification settings.
+                </Policy>
+                <Policy>
+                  We may use information you provide us in order to show you
+                  targeted ads as describe in our Privacy Policy
+                </Policy>
+              </PolicyBox>
+            </PolicyContainer>
           </BodyContainer>
         </Container>
+        <Modal visible={this.state.secondaryModalVisibility}>
+          <CreateInfo />
+        </Modal>
       </Wrapper>
     );
   }
@@ -160,7 +234,7 @@ const Cancel = styled.Text`
   font-size: 17px;
   font-family: "InterstateRegular";
   text-align: center;
-  color: ${theme.lightGrayB};
+  color: ${theme.HeaderLine};
 `;
 
 const TitleBox = styled.View`
@@ -182,6 +256,13 @@ const NextContainer = styled.View`
 `;
 
 const NextBox = styled.TouchableWithoutFeedback``;
+
+const GoNext = styled.Text`
+  font-size: 17px;
+  font-family: "InterstateRegular";
+  color: ${theme.HeaderLine};
+  text-align: center;
+`;
 
 const Next = styled.Text`
   font-size: 17px;
@@ -249,10 +330,10 @@ const EmailInput = styled.TextInput`
   color: ${theme.chacoal};
 `;
 
-const Warming = styled.Text`
+const Warning = styled.Text`
   position: absolute;
   top: 65%;
-  color: red;
+  color: rgb(202, 64, 58);
   font-size: 10.5px;
 `;
 
@@ -273,4 +354,27 @@ const PWInput = styled.TextInput`
   font-size: 16px;
   font-family: "InterstateRegular";
   color: ${theme.chacoal};
+`;
+
+const PolicyContainer = styled.View`
+  flex: 1;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 3%;
+`;
+
+const Policy = styled.Text`
+  width: 100%;
+  font-size: 11;
+  text-align: center;
+  color: ${theme.gray};
+  padding: 2% 3%;
+  font-family: "InterstateRegular";
+`;
+
+const PolicyBox = styled.View`
+  width: 100%;
+  height: 33%;
 `;

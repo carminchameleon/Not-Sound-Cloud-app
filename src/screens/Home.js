@@ -11,11 +11,11 @@ import styled from "styled-components";
 import * as Font from "expo-font";
 import { addListener } from "expo/build/Updates/Updates";
 import CreateAccount from "./CreateAccount";
-
-export class Welcome extends Component {
+import CreateInfo from "./CreateInfo";
+export class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { modalVisible: false };
+    this.state = { modalVisible: false, photoNum: 4 };
   }
 
   setModalVisible = visible => {
@@ -24,12 +24,15 @@ export class Welcome extends Component {
     });
   };
 
+  getRandom = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
   render() {
     const { modalVisible } = this.state;
     return (
       <Container>
         <BackgroundImage
-          source={require("../assets/images/5.jpg")}
+          source={require("../assets/images/3.jpg")}
         ></BackgroundImage>
         <Logo
           source={require("../assets/images/SClogo.png")}
@@ -71,7 +74,7 @@ export class Welcome extends Component {
   }
 }
 
-export default Welcome;
+export default Home;
 
 const Container = styled.View`
   display: flex;

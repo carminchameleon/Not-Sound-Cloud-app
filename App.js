@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as Font from "expo-font";
-import Welcome from "./src/screens/Welcome";
+import Home from "./src/screens/Home";
 import { AppLoading } from "expo";
 import { theme, flexCenter } from "./src/components/theme";
 import styled, {
@@ -20,7 +20,7 @@ export default function App() {
 
   if (fontsLoaded) {
     <ThemePovider theme={theme} />;
-    return <Welcome />;
+    return <Home />;
   } else {
     return (
       <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} />
