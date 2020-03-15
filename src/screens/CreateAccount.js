@@ -11,7 +11,9 @@ import {
   Modal,
   Alert,
   TextInput,
-  TouchableNativeFeedbackBase
+  TouchableNativeFeedbackBase,
+  Keyboard,
+  AsyncStorage
 } from "react-native";
 
 import styled from "styled-components";
@@ -28,13 +30,14 @@ function checkEmail(address) {
 }
 
 function checkPassword(PW) {
-  if (PW.length > 5) {
+  if (PW.length > 7) {
     return true;
   } else {
     return false;
   }
 }
 
+const url = "http://10.58.1.163:8000/user/sign-up/app";
 export class CreateAccount extends Component {
   constructor() {
     super();
@@ -48,6 +51,7 @@ export class CreateAccount extends Component {
       showPasswordWarning: true
     };
   }
+
   // 클릭했을 때, 입력 창이 올라오게
   handlePosition = focus => {
     this.setState({ focused: focus });
@@ -79,6 +83,32 @@ export class CreateAccount extends Component {
     }
   };
 
+  handleSubmit = e => {
+    const data = {
+      email: this.state.mail,
+      password: this.state.password
+    };
+    console.log(data);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else if (res.status === 500) {
+          alert("Wrong from backend");
+        } else {
+          alert("wrong from frontend");
+        }
+      })
+      .then(res => console.log(res.token));
+  };
+
   render() {
     const { theme, flexCenter } = { theme, flexCenter };
     const { setModalVisible } = this.props;
@@ -90,105 +120,105 @@ export class CreateAccount extends Component {
       validPassword
     } = this.state;
     return (
-      <Wrapper>
-        <Container>
-          <HeaderContainer>
-            <CancelContainer>
-              <CancelBox onPress={() => setModalVisible(false)}>
-                <Cancel>Cancel</Cancel>
-              </CancelBox>
-            </CancelContainer>
-            <TitleBox>
-              <Title>Create account</Title>
-            </TitleBox>
-            <NextContainer>
-              <NextBox>
-                {validEmail && validPassword ? (
-                  <GoNext>Next</GoNext>
-                ) : (
-                  <Next>Next</Next>
-                )}
-              </NextBox>
-            </NextContainer>
-          </HeaderContainer>
-          <BodyContainer>
-            {focused ? <></> : <SocialSignup />}
-            <InputContainer>
-              <EmailContainer>
-                <InputTitleBox>
-                  <InputTitle>EMAIL</InputTitle>
-                </InputTitleBox>
-                <InputContentsBox>
-                  <EmailInput
-                    onFocus={() => {
-                      this.handlePosition(true);
-                      this.setState({ showEmailWarning: true });
-                    }}
-                    onBlur={() => {
-                      this.checkMailWarning();
-                    }}
-                    onChangeText={val => {
-                      this.handleEmail(val);
-                    }}
-                    placeholder="mail@example.com"
-                    returnKeyType={"done"}
-                    autoCorrect={false}
-                  ></EmailInput>
-                  {showEmailWarning ? (
-                    <></>
+      <TouchZone onPress={() => Keyboard.dismiss()}>
+        <Wrapper>
+          <Container>
+            <HeaderContainer>
+              <CancelContainer>
+                <CancelBox onPress={() => setModalVisible(false)}>
+                  <Cancel>Cancel</Cancel>
+                </CancelBox>
+              </CancelContainer>
+              <TitleBox>
+                <Title>Create account</Title>
+              </TitleBox>
+              <NextContainer>
+                <NextBox>
+                  {validEmail && validPassword ? (
+                    <GoNext onPress={this.handleSubmit}>Done</GoNext>
                   ) : (
-                    <Warning>Please enter a valid email address</Warning>
+                    <Next>Done</Next>
                   )}
-                </InputContentsBox>
-              </EmailContainer>
-              <PWContainer>
-                <InputTitleBox>
-                  <InputTitle>PASSWORD</InputTitle>
-                </InputTitleBox>
-                <InputContentsBox>
-                  <PWInput
-                    onFocus={() => {
-                      this.handlePosition(true);
-                      this.setState({ showPasswordWarning: true });
-                    }}
-                    onBlur={() => {
-                      this.checkPasswordWarning();
-                    }}
-                    onChangeText={val => {
-                      this.handlePassword(val);
-                    }}
-                    returnKeyType={"done"}
-                    autoCorrect={false}
-                    placeholder="Min 6 characters"
-                  ></PWInput>
-                  {showPasswordWarning ? (
-                    <></>
-                  ) : (
-                    <Warning>Please enter a valid password</Warning>
-                  )}
-                </InputContentsBox>
-              </PWContainer>
-            </InputContainer>
-            <PolicyContainer>
-              <PolicyBox>
-                <Policy>
-                  We may use your email and devices for updates and tips on
-                  SoundCloud's products and services, and for activities
-                  notifications. You can unsubscribe for free at any time in
-                  your notification settings.
-                </Policy>
-                <Policy>
-                  We may use information you provide us in order to show you
-                  targeted ads as describe in our Privacy Policy
-                </Policy>
-              </PolicyBox>
-            </PolicyContainer>
-          </BodyContainer>
-        </Container>
-        <Modal visible={this.state.secondaryModalVisibility}>
-          <CreateInfo />
-        </Modal>
-      </Wrapper>
+                </NextBox>
+              </NextContainer>
+            </HeaderContainer>
+            <BodyContainer>
+              {focused ? <></> : <SocialSignup />}
+              <InputContainer>
+                <EmailContainer>
+                  <InputTitleBox>
+                    <InputTitle>EMAIL</InputTitle>
+                  </InputTitleBox>
+                  <InputContentsBox>
+                    <EmailInput
+                      onFocus={() => {
+                        this.handlePosition(true);
+                        this.setState({ showEmailWarning: true });
+                      }}
+                      onBlur={() => {
+                        this.checkMailWarning();
+                      }}
+                      onChangeText={val => {
+                        this.handleEmail(val);
+                      }}
+                      placeholder="mail@example.com"
+                      returnKeyType={"done"}
+                      autoCorrect={false}
+                      KeyboardType="email-address"
+                    ></EmailInput>
+                    {showEmailWarning ? (
+                      <></>
+                    ) : (
+                      <Warning>Please enter a valid email address</Warning>
+                    )}
+                  </InputContentsBox>
+                </EmailContainer>
+                <PWContainer>
+                  <InputTitleBox>
+                    <InputTitle>PASSWORD</InputTitle>
+                  </InputTitleBox>
+                  <InputContentsBox>
+                    <PWInput
+                      onFocus={() => {
+                        this.handlePosition(true);
+                        this.setState({ showPasswordWarning: true });
+                      }}
+                      onBlur={() => {
+                        this.checkPasswordWarning();
+                      }}
+                      onChangeText={val => {
+                        this.handlePassword(val);
+                      }}
+                      returnKeyType={"done"}
+                      autoCorrect={false}
+                      placeholder="Min 8 characters"
+                    ></PWInput>
+                    {showPasswordWarning ? (
+                      <></>
+                    ) : (
+                      <Warning>Please enter a valid password</Warning>
+                    )}
+                  </InputContentsBox>
+                </PWContainer>
+              </InputContainer>
+              <PolicyContainer>
+                <PolicyBox>
+                  <Policy>
+                    We may use your email and devices for updates and tips on
+                    SoundCloud's products and services, and for activities
+                    notifications. You can unsubscribe for free at any time in
+                    your notification settings.
+                  </Policy>
+                  <Policy>
+                    We may use information you provide us in order to show you
+                    targeted ads as describe in our Privacy Policy
+                  </Policy>
+                </PolicyBox>
+              </PolicyContainer>
+            </BodyContainer>
+          </Container>
+        </Wrapper>
+      </TouchZone>
     );
   }
 }
@@ -378,3 +408,5 @@ const PolicyBox = styled.View`
   width: 100%;
   height: 33%;
 `;
+
+const TouchZone = styled.TouchableWithoutFeedback``;

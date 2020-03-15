@@ -1,5 +1,6 @@
-import { createStackNavigator } from "react-navigation-stack";
-import { createAppContainer } from "react-navigation";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
 import CreateAccount from "../screens/CreateAccount";
 const screens = {
   Home: {

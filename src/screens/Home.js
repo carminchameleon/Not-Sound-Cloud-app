@@ -11,11 +11,11 @@ import styled from "styled-components";
 import * as Font from "expo-font";
 import { addListener } from "expo/build/Updates/Updates";
 import CreateAccount from "./CreateAccount";
-import CreateInfo from "./CreateInfo";
+import LoginScreen from "./LoginScreen";
 export class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = { modalVisible: false, photoNum: 4 };
+    this.state = { modalVisible: false, photoNum: 4, loginVisible: false };
   }
 
   setModalVisible = visible => {
@@ -24,11 +24,15 @@ export class Home extends Component {
     });
   };
 
-  getRandom = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+  setLoginVisible = visible => {
+    this.setState({
+      loginVisible: visible
+    });
   };
+
   render() {
-    const { modalVisible } = this.state;
+    console.log(this.props.navigation);
+    const { modalVisible, loginVisible } = this.state;
     return (
       <Container>
         <BackgroundImage
@@ -48,15 +52,21 @@ export class Home extends Component {
             <SignUpBox
               activeOpacity={0.6}
               onPress={() => {
-                this.setModalVisible(!modalVisible);
+                this.setModalVisible(!loginVisible);
               }}
-              onRequestClose={() => this.visibleModal(false)}
+              onRequestClose={() => this.loginModal(false)}
             >
               <SignUp>Create an account</SignUp>
             </SignUpBox>
           </SignUpWrap>
           <SignInWrap>
-            <SignInBox activeOpacity={0.6}>
+            <SignInBox
+              activeOpacity={0.6}
+              onPress={() => {
+                this.setLoginVisible(!modalVisible);
+              }}
+              onRequestClose={() => this.visibleModal(false)}
+            >
               <SignIn>I already have an account</SignIn>
             </SignInBox>
           </SignInWrap>
@@ -69,6 +79,14 @@ export class Home extends Component {
         >
           <CreateAccount setModalVisible={this.setModalVisible} />
         </SignUpModal>
+
+        <LoginModal
+          animationType="slide"
+          transparent={true}
+          visible={loginVisible}
+        >
+          <LoginScreen setLoginVisible={this.setLoginVisible} />
+        </LoginModal>
       </Container>
     );
   }
@@ -193,3 +211,5 @@ const SignIn = styled.Text`
 `;
 
 const SignUpModal = styled.Modal``;
+
+const LoginModal = styled.Modal``;
