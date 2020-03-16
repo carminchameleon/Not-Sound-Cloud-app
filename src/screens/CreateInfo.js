@@ -9,7 +9,7 @@ import {
   modal,
   AsyncStorage
 } from "react-native";
-import Tabs from "../routes/Tabs";
+import Main from "../routes/Main";
 
 const url = "http://10.58.1.163:8000/user/sign-in/google";
 export class CreateInfo extends Component {
@@ -65,6 +65,7 @@ export class CreateInfo extends Component {
   };
 
   render() {
+    console.log(this.props.navigation);
     const { theme, flexCenter } = { theme, flexCenter };
     const { setInfoVisible, navigation } = this.props;
     const { validAge, genderSelected } = this.state;
@@ -92,7 +93,13 @@ export class CreateInfo extends Component {
                       Done
                     </RealDone>
                   ) : (
-                    <Done>Done</Done>
+                    <Done
+                      onPress={() => {
+                        navigation.push("Main");
+                      }}
+                    >
+                      Done
+                    </Done>
                   )}
                 </DoneBox>
               </DoneContainer>

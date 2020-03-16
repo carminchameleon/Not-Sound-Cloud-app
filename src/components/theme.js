@@ -9,7 +9,10 @@ export const theme = {
   gray: "#999", // 글씨에 들어가는 gray
   lightGrayA: "rgb(242,242,242)",
   lightGrayB: "rgb(226,226,226)",
-  HeaderLine: "rgb(194,194,194)"
+  HeaderLine: "rgb(194,194,194)",
+  Icon: "rgb(101,101,101)",
+  MainFontGray: "#8C8C8C",
+  MainFontChacole: "rgb(51,51,51)"
 };
 
 export const flexCenter = css`
