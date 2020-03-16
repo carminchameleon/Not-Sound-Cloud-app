@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SocialSignup from "../screens/SocialSignup";
+import CreateInfo from "./CreateInfo";
 import { Ionicons } from "@expo/vector-icons";
 import {
   View,
@@ -48,10 +49,15 @@ export class CreateAccount extends Component {
       showEmailWarning: true,
       password: "",
       validPassword: false,
-      showPasswordWarning: true
+      showPasswordWarning: true,
+      infoVisible: false
     };
   }
-
+  setInfoVisible = visible => {
+    this.setState({
+      infoVisible: visible
+    });
+  };
   // 클릭했을 때, 입력 창이 올라오게
   handlePosition = focus => {
     this.setState({ focused: focus });
@@ -59,7 +65,7 @@ export class CreateAccount extends Component {
 
   ///내가 친 이메일과 그 이메일이 적합한지를 저장하는 함수
   handleEmail = email => {
-    this.setState({ mail: email, validEmail: checkEmail(email) });
+    this.setState({ email: email, validEmail: checkEmail(email) });
   };
 
   checkMailWarning = () => {
@@ -83,32 +89,6 @@ export class CreateAccount extends Component {
     }
   };
 
-  handleSubmit = e => {
-    const data = {
-      email: this.state.mail,
-      password: this.state.password
-    };
-    console.log(data);
-    fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else if (res.status === 500) {
-          alert("Wrong from backend");
-        } else {
-          alert("wrong from frontend");
-        }
-      })
-      .then(res => console.log(res.token));
-  };
-
   render() {
     const { theme, flexCenter } = { theme, flexCenter };
     const { setModalVisible } = this.props;
@@ -117,7 +97,11 @@ export class CreateAccount extends Component {
       validEmail,
       showEmailWarning,
       showPasswordWarning,
-      validPassword
+      validPassword,
+      infoVisible,
+      email,
+      setInfoVisible,
+      password
     } = this.state;
     return (
       <TouchZone onPress={() => Keyboard.dismiss()}>
@@ -135,7 +119,9 @@ export class CreateAccount extends Component {
               <NextContainer>
                 <NextBox>
                   {validEmail && validPassword ? (
-                    <GoNext onPress={this.handleSubmit}>Done</GoNext>
+                    <GoNext onPress={() => this.setInfoVisible(true)}>
+                      Next
+                    </GoNext>
                   ) : (
                     <Next>Done</Next>
                   )}
@@ -215,6 +201,19 @@ export class CreateAccount extends Component {
                   </Policy>
                 </PolicyBox>
               </PolicyContainer>
+              <InfoModal
+                animationType="fade"
+                transparent={true}
+                visible={infoVisible}
+                onRequestClose={() => this.infoVisible(false)}
+              >
+                <CreateInfo
+                  setInfoVisible={this.setInfoVisible}
+                  email={email}
+                  password={password}
+                  navigation={this.props.navigation}
+                />
+              </InfoModal>
             </BodyContainer>
           </Container>
         </Wrapper>
@@ -410,3 +409,5 @@ const PolicyBox = styled.View`
 `;
 
 const TouchZone = styled.TouchableWithoutFeedback``;
+
+const InfoModal = styled.Modal``;

@@ -59,39 +59,39 @@ function CreateAccount({ setLoginVisible }) {
     };
   };
 
-  const handleSubmit = e => {
-    const data = {
-      email: email,
-      password: password
-    };
-    console.log(data);
-    fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => {
-        if (res.status === 200) {
-          alert("login Okay");
-          return res.json();
-        } else if (res.status === 500) {
-          alert("Wrong from backend");
-        } else if (res.status === 401) {
-          alert("check your Password");
-        } else {
-          alert("wrong from frontend");
-        }
-      })
-      .then(response => AsyncStorage.setItem("token", response.user.token))
-      .then(
-        AsyncStorage.getItem("token").then(item => {
-          console.log("token", item);
-        })
-      );
-  };
+  // const handleSubmit = e => {
+  //   const data = {
+  //     email: email,
+  //     password: password
+  //   };
+  //   console.log(data);
+  //   fetch(url, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify(data)
+  //   })
+  //     .then(res => {
+  //       if (res.status === 200) {
+  //         alert("login Okay");
+  //         return res.json();
+  //       } else if (res.status === 500) {
+  //         alert("Wrong from backend");
+  //       } else if (res.status === 401) {
+  //         alert("check your Password");
+  //       } else {
+  //         alert("wrong from frontend");
+  //       }
+  //     })
+  //     .then(response => AsyncStorage.setItem("token", response.user.token))
+  //     .then(
+  //       AsyncStorage.getItem("token").then(item => {
+  //         console.log("token", item);
+  //       })
+  //     );
+  // };
 
   const storeToken = async token => {
     try {
