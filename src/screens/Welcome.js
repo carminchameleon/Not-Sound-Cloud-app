@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  modal,
+  Modal,
   TouchableWithoutFeedback
 } from "react-native";
 import styled from "styled-components";
@@ -12,7 +12,7 @@ import * as Font from "expo-font";
 import { addListener } from "expo/build/Updates/Updates";
 import CreateAccount from "./CreateAccount";
 import LoginScreen from "./LoginScreen";
-export class Home extends Component {
+export class Welcome extends Component {
   constructor(props) {
     super(props);
     this.state = { modalVisible: false, photoNum: 4, loginVisible: false };
@@ -31,7 +31,6 @@ export class Home extends Component {
   };
 
   render() {
-    console.log(this.props.navigation);
     const { modalVisible, loginVisible } = this.state;
     return (
       <Container>
@@ -77,7 +76,10 @@ export class Home extends Component {
           visible={modalVisible}
           onRequestClose={() => Alert.alert("modal has been closed")}
         >
-          <CreateAccount setModalVisible={this.setModalVisible} />
+          <CreateAccount
+            setModalVisible={this.setModalVisible}
+            navigation={this.props.navigation}
+          />
         </SignUpModal>
 
         <LoginModal
@@ -92,7 +94,7 @@ export class Home extends Component {
   }
 }
 
-export default Home;
+export default Welcome;
 
 const Container = styled.View`
   display: flex;

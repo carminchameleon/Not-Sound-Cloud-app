@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { theme, flexCenter } from "../components/theme";
+import { NavigationContainer } from "@react-navigation/native";
 import {
   Picker,
   TouchableWithoutFeedback,
   Keyboard,
-  modal
+  modal,
+  AsyncStorage
 } from "react-native";
+import Tabs from "../routes/Tabs";
 
+const url = "http://10.58.1.163:8000/user/sign-in/google";
 export class CreateInfo extends Component {
   constructor(props) {
     super(props);
@@ -32,10 +36,37 @@ export class CreateInfo extends Component {
     });
   };
 
+  handleSubmit = e => {
+    const data = {
+      email: this.props.email,
+      password: this.props.password,
+      gender: this.state.gender,
+      age: this.state.age
+    };
+    console.log("datacheck", data);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else if (res.status === 500) {
+          alert("Wrong from backend");
+        } else {
+          alert("wrong from frontend");
+        }
+      })
+      .then(res => console.log(res.token));
+  };
+
   render() {
     const { theme, flexCenter } = { theme, flexCenter };
-    const { setModalVisible } = this.props;
-
+    const { setInfoVisible, navigation } = this.props;
     const { validAge, genderSelected } = this.state;
     return (
       <TouchZone
@@ -47,7 +78,7 @@ export class CreateInfo extends Component {
           <Container>
             <HeaderContainer>
               <CancelContainer>
-                <CancelBox onPress={() => setModalVisible(false)}>
+                <CancelBox onPress={() => setInfoVisible(false)}>
                   <Cancel>Cancel</Cancel>
                 </CancelBox>
               </CancelContainer>
@@ -57,7 +88,9 @@ export class CreateInfo extends Component {
               <DoneContainer>
                 <DoneBox>
                   {validAge && genderSelected ? (
-                    <RealDone>Done</RealDone>
+                    <RealDone onPress={() => this.handleSubmit()}>
+                      Done
+                    </RealDone>
                   ) : (
                     <Done>Done</Done>
                   )}
