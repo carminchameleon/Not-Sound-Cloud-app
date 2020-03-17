@@ -91,7 +91,7 @@ export class CreateAccount extends Component {
 
   render() {
     const { theme, flexCenter } = { theme, flexCenter };
-    const { setModalVisible } = this.props;
+    const { setModalVisible, navigation } = this.props;
     const {
       focused,
       validEmail,
@@ -119,11 +119,15 @@ export class CreateAccount extends Component {
               <NextContainer>
                 <NextBox>
                   {validEmail && validPassword ? (
-                    <GoNext onPress={() => this.setInfoVisible(true)}>
+                    <GoNext
+                      onPress={() => {
+                        this.setInfoVisible(true);
+                      }}
+                    >
                       Next
                     </GoNext>
                   ) : (
-                    <Next>Done</Next>
+                    <Next>Next</Next>
                   )}
                 </NextBox>
               </NextContainer>
@@ -209,9 +213,10 @@ export class CreateAccount extends Component {
               >
                 <CreateInfo
                   setInfoVisible={this.setInfoVisible}
+                  setModalVisible={this.setModalVisible}
                   email={email}
                   password={password}
-                  navigation={this.props.navigation}
+                  navigation={navigation}
                 />
               </InfoModal>
             </BodyContainer>

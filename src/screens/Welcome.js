@@ -87,7 +87,10 @@ export class Welcome extends Component {
           transparent={true}
           visible={loginVisible}
         >
-          <LoginScreen setLoginVisible={this.setLoginVisible} />
+          <LoginScreen
+            setLoginVisible={this.setLoginVisible}
+            setModalVisible={this.setModalVisible}
+          />
         </LoginModal>
       </Container>
     );

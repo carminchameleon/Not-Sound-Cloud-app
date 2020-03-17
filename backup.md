@@ -6,7 +6,7 @@ import Welcome from "./src/screens/Welcome";
 import CreateAccount from "./src/screens/CreateAccount";
 import LoginScreen from "./src/screens/LoginScreen";
 import CreateInfo from "./src/screens/CreateInfo";
-import Main from "./src/routes/Main";
+import Tabs from "./src/routes/Tabs";
 import styled, {
   createGlobalStyle,
   ThemePovider,
@@ -51,18 +51,15 @@ export default function App() {
   };
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   if (fontsLoaded) {
     <ThemePovider theme={theme} />;
     return (
       <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-          {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
-          <Stack.Screen name="Main" component={Main} />
+        <Stack.Navigator>
+          <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Tabs" component={Tabs} />
         </Stack.Navigator>
       </NavigationContainer>
     );
