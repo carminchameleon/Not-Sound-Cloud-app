@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { View, TouchableWithoutFeedback, StatusBar } from "react-native";
 
 export class LoadingScreen extends Component {
   render() {
@@ -15,7 +16,7 @@ export class LoadingScreen extends Component {
   }
 }
 
-export default Loading;
+export default LoadingScreen;
 
 const Container = styled.View`
   display: flex;
