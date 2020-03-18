@@ -1,147 +1,198 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { View, TouchableWithoutFeedback, Text } from "react-native";
-import { theme, flexCenter } from "../components/theme";
+import {
+  View,
+  TouchableWithoutFeedback,
+  Text,
+  FlatList,
+  Image
+} from "react-native";
+import { theme, flexCenter, ScrollView } from "../components/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import HeaderBar from "../components/HeaderBar";
+import HomeData from "../../Public/Data/Homedata";
+import PlayerBar from "../components/PlayerBar";
+
+import {
+  HeaderBackground,
+  GestureHandlerRefContext
+} from "react-navigation-stack";
 
 function HomeScreen() {
+  const [songData, setData] = useState(HomeData.song);
+  console.log(HomeData.song[0]);
   return (
-    <TouchZone>
-      <Wrapper>
-        <HeaderContainer>
-          <HeaderBox>
-            <Header>Home</Header>
-            <IconWrapper>
-              <IconBox>
-                <Icon>
-                  <Feather name="cast" size={24} color="rgb(101,101,101)" />
-                </Icon>
-              </IconBox>
-              <IconBox>
-                <Icon>
-                  <Feather
-                    name="arrow-up-circle"
-                    size={24}
-                    color="rgb(101,101,101)"
-                  />
-                </Icon>
-              </IconBox>
-            </IconWrapper>
-          </HeaderBox>
-        </HeaderContainer>
-        <BodyContainer>
+    <Wrapper>
+      <HeaderBar />
+      <Body>
+        <Container>
           <TagContainer>
-            <TagHeader>
-              <TagName>Chill</TagName>
-              <TagComment>
-                Popular playlists from the SoundCloud community.
-              </TagComment>
-            </TagHeader>
-            <TagBody></TagBody>
+            <TagName>Chill</TagName>
+            <TagComment>
+              Popular playlists from the SoundCloud community
+            </TagComment>
+            <SongContainer>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={songData[0].chill}
+                renderItem={({ item }) => (
+                  <SongBox>
+                    <CoverImage source={{ url: `${item.small_img_url}` }} />
+                    <SongInfo>
+                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
+                    </SongInfo>
+                    <Artist>{item.artist_name}</Artist>
+                  </SongBox>
+                )}
+              />
+            </SongContainer>
           </TagContainer>
-        </BodyContainer>
-      </Wrapper>
-    </TouchZone>
+          <TagContainer>
+            <TagName>Party</TagName>
+            <TagComment>
+              Popular playlists from the SoundCloud community
+            </TagComment>
+            <SongContainer>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={songData[1].party}
+                renderItem={({ item }) => (
+                  <SongBox>
+                    <CoverImage source={{ url: `${item.small_img_url}` }} />
+                    <SongInfo>
+                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
+                    </SongInfo>
+                    <Artist>{item.artist_name}</Artist>
+                  </SongBox>
+                )}
+              />
+            </SongContainer>
+          </TagContainer>
+          <TagContainer>
+            <TagName>Work out</TagName>
+            <TagComment>
+              Popular playlists from the SoundCloud community
+            </TagComment>
+            <SongContainer>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={songData[2].wecode}
+                renderItem={({ item }) => (
+                  <SongBox>
+                    <CoverImage source={{ url: `${item.small_img_url}` }} />
+                    <SongInfo>
+                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
+                    </SongInfo>
+                    <Artist>{item.artist_name}</Artist>
+                  </SongBox>
+                )}
+              />
+            </SongContainer>
+          </TagContainer>
+          <TagContainer>
+            <TagName>Relax</TagName>
+            <TagComment>
+              Popular playlists from the SoundCloud community
+            </TagComment>
+            <SongContainer>
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={songData[3].wework}
+                renderItem={({ item }) => (
+                  <SongBox>
+                    <CoverImage source={{ url: `${item.small_img_url}` }} />
+                    <SongInfo>
+                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
+                    </SongInfo>
+                    <Artist>{item.artist_name}</Artist>
+                  </SongBox>
+                )}
+              />
+            </SongContainer>
+          </TagContainer>
+        </Container>
+      </Body>
+    </Wrapper>
   );
 }
 
 export default HomeScreen;
 
 const Wrapper = styled.View`
-  width: 100%;
-  height: 100%;
-  background-color: ${theme.lightGrayA};
-  ${theme.flexCenter}
+  flex: 1;
 `;
 
-const TouchZone = styled.TouchableWithoutFeedback`
-  width: 100%;
-  height: 100%;
+const Body = styled.ScrollView`
+  flex: 1;
 `;
 
-const HeaderContainer = styled.View`
-  width: 100%;
-  height: 10.5%;
-  background-color: white;
-  display: flex;
-  justify-content: flex-end;
-  border-bottom-color: ${theme.HeaderLine};
-  border-bottom-width: 0.8px;
-`;
-
-const HeaderBox = styled.View`
-  width: 100%;
-  height: 50%;
-  ${flexCenter};
-  position: relative;
-`;
-const Header = styled.Text`
-  width: 100%;
-  height: 100%;
-  font-family: "InterstateRegular";
-  font-size: 17px;
-  text-align: center;
-  padding-top: 3%;
-`;
-
-const IconWrapper = styled.View`
-  padding-top: 7%;
-  width: 16%;
-  height: 100%;
-  position: absolute;
-  left: 79%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const IconBox = styled.TouchableWithoutFeedback`
-  width: 50px;
-  height: 100%;
-  background-color: yellow;
-  display: flex;
-`;
-
-const Icon = styled.View`
-  padding-top: 7%;
-  height: 100%;
-  ${theme.flexCenter}
-`;
-
-const BodyContainer = styled.View`
-  width: 100%;
-  height: 89.5%;
+const Container = styled.View`
+  border-top-color: ${theme.lightGrayB};
+  border-top-width: 0.8px;
+  margin-top: 3%;
+  flex: 1;
+  background-color: transparent;
 `;
 
 const TagContainer = styled.View`
-  margin-top: 15px;
-  width: 100%;
-  height: 40%;
   background-color: white;
   border-top-color: ${theme.lightGrayB};
-  border-top-width: 0.8px;
+  border-top-width: 0.6px;
   border-bottom-color: ${theme.lightGrayB};
-  border-bottom-width: 0.8px;
-  display: flex;
-  padding: 4%;
+  border-bottom-width: 0.6px;
+  padding-left: 4%;
+  margin-bottom: 3%;
 `;
-const TagHeader = styled.View`
-  flex: 2;
-`;
+
 const TagName = styled.Text`
-  margin-top: 4%;
   font-size: 25px;
+  padding-top: 6%;
   font-family: "InterstateRegular";
   color: ${theme.MainFontChacole};
 `;
+
 const TagComment = styled.Text`
   margin: 2% 0;
-  font-size: 15px;
+  margin-bottom: 3%;
+  font-size: 13.5px;
   font-family: "InterstateRegular";
   color: ${theme.MainFontGray};
 `;
 
-const TagBody = styled.View`
-  flex: 5;
+const SongContainer = styled.View`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const CoverImage = styled.Image`
+  width: 130px;
+  height: 130px;
+`;
+
+const SongTitle = styled.Text`
+  padding-top: 4%;
+  margin-top: 15px;
+  font-family: "InterstateRegular";
+  font-size: 15px;
+  color: ${theme.MainFontChacole};
+`;
+
+const SongBox = styled.View`
+  padding-right: 2%;
+`;
+
+const SongInfo = styled.View`
+  width: 120px;
+`;
+const Artist = styled.Text`
+  margin-top: 2px;
+  margin-bottom: 13px;
+  font-size: 13px;
+  color: ${theme.MainFontGray};
+  overflow: hidden;
 `;

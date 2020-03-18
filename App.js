@@ -2,11 +2,14 @@ import React, { useState, createContext } from "react";
 import { AppLoading } from "expo";
 import { theme, flexCenter } from "./src/components/theme";
 import * as Font from "expo-font";
+import { StatusBar } from "react-native";
 import Welcome from "./src/screens/Welcome";
 import CreateAccount from "./src/screens/CreateAccount";
 import LoginScreen from "./src/screens/LoginScreen";
+import LoadingScreen from "./src/screens/LoadingScreen";
 import CreateInfo from "./src/screens/CreateInfo";
 import Main from "./src/routes/Main";
+
 import styled, {
   createGlobalStyle,
   ThemePovider,
@@ -16,19 +19,7 @@ import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createSwitchNavigator } from "react-navigation";
 import { AsyncStorage } from "react-native";
-// import * as firebase from "firebase";
-
-// var firebaseConfig = {
-//   apiKey: "AIzaSyDVGoWvJ6GEd1_f_9AQqYFP6SPqrAAxlWI",
-//   authDomain: "notsoundcloud-936fa.firebaseapp.com",
-//   databaseURL: "https://notsoundcloud-936fa.firebaseio.com",
-//   projectId: "notsoundcloud-936fa",
-//   storageBucket: "notsoundcloud-936fa.appspot.com",
-//   messagingSenderId: "186861741166",
-//   appId: "1:186861741166:web:1129731203462fd708327f"
-// };
-// // Initialize Firebase
-// firebase.initializeApp(firebaseConfig);
+import PlayerBar from "./src/components/PlayerBar";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -39,17 +30,6 @@ const getFonts = () =>
 const Stack = createStackNavigator();
 
 export default function App() {
-  console.log("토큰 있니", AsyncStorage.getItem("token"));
-  const checkToken = () => {
-    if (AsyncStorage.getItem("token") === null) {
-      console.log("empty Token");
-      return true;
-    } else {
-      console.log("get Token");
-      return false;
-    }
-  };
-
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   if (fontsLoaded) {
@@ -64,6 +44,7 @@ export default function App() {
           {/* <Stack.Screen name="Welcome" component={Welcome} /> */}
           <Stack.Screen name="Main" component={Main} />
         </Stack.Navigator>
+        <PlayerBar />
       </NavigationContainer>
     );
   } else {

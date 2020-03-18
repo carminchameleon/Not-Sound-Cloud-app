@@ -133,7 +133,7 @@ export class CreateAccount extends Component {
               </NextContainer>
             </HeaderContainer>
             <BodyContainer>
-              {focused ? <></> : <SocialSignup />}
+              {focused ? null : <SocialSignup />}
               <InputContainer>
                 <EmailContainer>
                   <InputTitleBox>
