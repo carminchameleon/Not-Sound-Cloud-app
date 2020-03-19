@@ -13,36 +13,26 @@ import {
 import { theme, flexCenter, ScrollView } from "../components/theme";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Audio, Video } from "expo-av";
 import SongData from "../../Public/Data/SongData";
+import { Asset } from "expo-asset";
+import { Audio, Video } from "expo-av";
+
+import React, { Component } from "react";
 
 function PlayerScreen() {
   const barNum = 270;
-  const [wave, setWave] = useState();
-  const [play, setPlay] = useState(false);
+  const [wave, setWave] = useState(SongData);
+  const 
   const [position, setPosition] = useState(0);
   const [fill, setFill] = useState(0);
-  const [SongInfo, getSongInfo] = useState();
 
   // window.setTimeout(() => {
   //   setPosition(position - 1);
   //   setFill(fill + 1);
   // }, 1000);
 
-  //10.58.3.91:8000/song/play/7
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(`http://10.58.3.91:8000/song/play/7`);
-      console.log(result);
-      setData(result.data);
-    };
-    console.log(fetchData());
-
-    fetchData();
-  }, []);
-
-  console.log("check", SongInfo);
+  console.log("hello")
   return (
     <TouchZone>
       <Container>
