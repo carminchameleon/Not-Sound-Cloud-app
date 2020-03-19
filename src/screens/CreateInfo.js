@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Main from "../routes/Main";
 
-const url = "http://10.58.1.163:8000/user/sign-in/google";
+const url = "http://10.58.1.163:8000/user/sign-up/app";
 export class CreateInfo extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +54,7 @@ export class CreateInfo extends Component {
     })
       .then(res => {
         if (res.status === 200) {
+          alert("회원가입 성공");
           return res.json();
         } else if (res.status === 500) {
           alert("Wrong from backend");

@@ -38,7 +38,11 @@ export default function App() {
 
   if (fontsLoaded) {
     <ThemePovider theme={theme} />;
-    return <PlayerScreen />;
+    return (
+      <NavigationContainer>
+        <Welcome />
+      </NavigationContainer>
+    );
   } else {
     return (
       <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} />

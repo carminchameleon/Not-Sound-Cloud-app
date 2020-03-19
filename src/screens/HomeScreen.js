@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   View,
   TouchableWithoutFeedback,
   Text,
   FlatList,
-  Image
+  Image,
+  ActivityIndicator
 } from "react-native";
 import { theme, flexCenter, ScrollView } from "../components/theme";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,105 +21,159 @@ import {
 } from "react-navigation-stack";
 
 function HomeScreen() {
-  const [songData, setData] = useState(HomeData.song);
-  console.log(HomeData.song[0]);
-  return (
-    <Wrapper>
-      <HeaderBar />
-      <Body>
-        <Container>
-          <TagContainer>
-            <TagName>Chill</TagName>
-            <TagComment>
-              Popular playlists from the SoundCloud community
-            </TagComment>
-            <SongContainer>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={songData[0].chill}
-                renderItem={({ item }) => (
-                  <SongBox>
-                    <CoverImage source={{ url: `${item.small_img_url}` }} />
-                    <SongInfo>
-                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
-                    </SongInfo>
-                    <Artist>{item.artist_name}</Artist>
-                  </SongBox>
-                )}
-              />
-            </SongContainer>
-          </TagContainer>
-          <TagContainer>
-            <TagName>Party</TagName>
-            <TagComment>
-              Popular playlists from the SoundCloud community
-            </TagComment>
-            <SongContainer>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={songData[1].party}
-                renderItem={({ item }) => (
-                  <SongBox>
-                    <CoverImage source={{ url: `${item.small_img_url}` }} />
-                    <SongInfo>
-                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
-                    </SongInfo>
-                    <Artist>{item.artist_name}</Artist>
-                  </SongBox>
-                )}
-              />
-            </SongContainer>
-          </TagContainer>
-          <TagContainer>
-            <TagName>Work out</TagName>
-            <TagComment>
-              Popular playlists from the SoundCloud community
-            </TagComment>
-            <SongContainer>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={songData[2].wecode}
-                renderItem={({ item }) => (
-                  <SongBox>
-                    <CoverImage source={{ url: `${item.small_img_url}` }} />
-                    <SongInfo>
-                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
-                    </SongInfo>
-                    <Artist>{item.artist_name}</Artist>
-                  </SongBox>
-                )}
-              />
-            </SongContainer>
-          </TagContainer>
-          <TagContainer>
-            <TagName>Relax</TagName>
-            <TagComment>
-              Popular playlists from the SoundCloud community
-            </TagComment>
-            <SongContainer>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={songData[3].wework}
-                renderItem={({ item }) => (
-                  <SongBox>
-                    <CoverImage source={{ url: `${item.small_img_url}` }} />
-                    <SongInfo>
-                      <SongTitle numberOfLines={1}>{item.song_name}</SongTitle>
-                    </SongInfo>
-                    <Artist>{item.artist_name}</Artist>
-                  </SongBox>
-                )}
-              />
-            </SongContainer>
-          </TagContainer>
-        </Container>
-      </Body>
-    </Wrapper>
-  );
+  const [songData, setSongData] = useState([]);
+  const [loading, isLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("fuck");
+    fetch("http://10.58.3.91:8000/song/home/1")
+      .then(res => res.json())
+      .then(res => setSongData(res.song));
+  }, []);
+
+  if (songData[1] !== undefined) {
+    return (
+      <Wrapper>
+        <HeaderBar />
+        <Body>
+          <Container>
+            <TagContainer>
+              <TagName>Chill</TagName>
+              <TagComment>
+                Popular playlists from the SoundCloud community
+              </TagComment>
+              <SongContainer>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={songData[0].Chill}
+                  renderItem={({ item }) => (
+                    <TouchZone onPress={() => alert("hello")}>
+                      <SongBox>
+                        <CoverImage source={{ url: `${item.big_img_url}` }} />
+                        <SongInfo>
+                          <SongTitle numberOfLines={1}>
+                            {item.song_name}
+                          </SongTitle>
+                        </SongInfo>
+                        <Artist>{item.artist_name}</Artist>
+                      </SongBox>
+                    </TouchZone>
+                  )}
+                />
+              </SongContainer>
+            </TagContainer>
+            <TagContainer>
+              <TagName>WeWork</TagName>
+              <TagComment>
+                Popular playlists from the SoundCloud community
+              </TagComment>
+              <SongContainer>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={songData[1].WeWork}
+                  renderItem={({ item }) => (
+                    <TouchZone onPress={() => alert("hello")}>
+                      <SongBox>
+                        <CoverImage source={{ url: `${item.big_img_url}` }} />
+                        <SongInfo>
+                          <SongTitle numberOfLines={1}>
+                            {item.song_name}
+                          </SongTitle>
+                        </SongInfo>
+                        <Artist>{item.artist_name}</Artist>
+                      </SongBox>
+                    </TouchZone>
+                  )}
+                />
+              </SongContainer>
+            </TagContainer>
+            <TagContainer>
+              <TagName>Work out</TagName>
+              <TagComment>
+                Popular playlists from the SoundCloud community
+              </TagComment>
+              <SongContainer>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={songData[2].GracefulRain}
+                  renderItem={({ item }) => (
+                    <TouchZone onPress={() => alert("hello")}>
+                      <SongBox>
+                        <CoverImage source={{ url: `${item.big_img_url}` }} />
+                        <SongInfo>
+                          <SongTitle numberOfLines={1}>
+                            {item.song_name}
+                          </SongTitle>
+                        </SongInfo>
+                        <Artist>{item.artist_name}</Artist>
+                      </SongBox>
+                    </TouchZone>
+                  )}
+                />
+              </SongContainer>
+            </TagContainer>
+            <TagContainer>
+              <TagName>Relax</TagName>
+              <TagComment>
+                Popular playlists from the SoundCloud community
+              </TagComment>
+              <SongContainer>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={songData[3].WeWorkout}
+                  renderItem={({ item }) => (
+                    <TouchZone onPress={() => alert("hello")}>
+                      <SongBox>
+                        <CoverImage source={{ url: `${item.big_img_url}` }} />
+                        <SongInfo>
+                          <SongTitle numberOfLines={1}>
+                            {item.song_name}
+                          </SongTitle>
+                        </SongInfo>
+                        <Artist>{item.artist_name}</Artist>
+                      </SongBox>
+                    </TouchZone>
+                  )}
+                />
+              </SongContainer>
+            </TagContainer>
+            <TagContainer>
+              <TagName>Hot</TagName>
+              <TagComment>
+                Popular playlists from the SoundCloud community
+              </TagComment>
+              <SongContainer>
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  data={songData[4].Wecode}
+                  renderItem={({ item }) => (
+                    <TouchZone onPress={() => alert("hello")}>
+                      <SongBox>
+                        <CoverImage source={{ url: `${item.big_img_url}` }} />
+                        <SongInfo>
+                          <SongTitle numberOfLines={1}>
+                            {item.song_name}
+                          </SongTitle>
+                        </SongInfo>
+                        <Artist>{item.artist_name}</Artist>
+                      </SongBox>
+                    </TouchZone>
+                  )}
+                />
+              </SongContainer>
+            </TagContainer>
+          </Container>
+        </Body>
+      </Wrapper>
+    );
+  } else {
+    return <View></View>;
+  }
 }
 
 export default HomeScreen;
@@ -196,3 +251,5 @@ const Artist = styled.Text`
   color: ${theme.MainFontGray};
   overflow: hidden;
 `;
+
+const TouchZone = styled.TouchableWithoutFeedback``;
