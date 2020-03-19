@@ -21,7 +21,7 @@ import { theme, flexCenter } from "../components/theme";
 
 const url = "http://10.58.1.163:8000/user/sign-in";
 
-function CreateAccount({ setLoginVisible }) {
+function CreateAccount({ navigation }) {
   const [focus, setFocus] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -110,7 +110,7 @@ function CreateAccount({ setLoginVisible }) {
         <Container>
           <HeaderContainer>
             <CancelContainer>
-              <CancelBox onPress={() => setLoginVisible(false)}>
+              <CancelBox onPress={() => navigation.pop()}>
                 <Cancel>Cancel</Cancel>
               </CancelBox>
             </CancelContainer>

@@ -38,8 +38,8 @@ export class CreateInfo extends Component {
 
   handleSubmit = e => {
     const data = {
-      email: this.props.email,
-      password: this.props.password,
+      email: this.props.route.params.email,
+      password: this.props.route.params.password,
       gender: this.state.gender,
       age: this.state.age
     };
@@ -66,6 +66,7 @@ export class CreateInfo extends Component {
   };
 
   render() {
+    console.log("파라미터", this.props.route.params.email);
     console.log(this.props.navigation);
     const { theme, flexCenter } = { theme, flexCenter };
     const { setInfoVisible, navigation } = this.props;
@@ -80,7 +81,9 @@ export class CreateInfo extends Component {
           <Container>
             <HeaderContainer>
               <CancelContainer>
-                <CancelBox onPress={() => setInfoVisible(false)}>
+                <CancelBox
+                  onPress={() => this.props.navigation.navigate("Welcome")}
+                >
                   <Cancel>Cancel</Cancel>
                 </CancelBox>
               </CancelContainer>

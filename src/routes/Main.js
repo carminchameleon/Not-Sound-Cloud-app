@@ -14,7 +14,6 @@ import LibraryScreen from "../screens/LibraryScreen";
 import StreamScreen from "../screens/StreamScreen";
 import PlayerBar from "../components/PlayerBar";
 const Tab = createBottomTabNavigator();
-
 function Tabs() {
   return (
     <Tab.Navigator
