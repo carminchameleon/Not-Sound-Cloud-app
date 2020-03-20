@@ -12,7 +12,7 @@ import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import LibraryScreen from "../screens/LibraryScreen";
 import StreamScreen from "../screens/StreamScreen";
-import PlayerBar from "../components/PlayerBar";
+import PlayerBar from "../screens/PlayerBar";
 const Tab = createBottomTabNavigator();
 function Tabs() {
   return (

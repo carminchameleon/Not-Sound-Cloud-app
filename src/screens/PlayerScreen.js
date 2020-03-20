@@ -41,7 +41,7 @@ export class PlayerScreen extends Component {
   }
 
   fetchData = () => {
-    fetch("http://10.58.3.91:8000/song/play/9")
+    fetch(`http://10.58.3.91:8000/song/play/${this.props.songId}`)
       .then(response => response.json())
       .then(responseJson =>
         this.setState({
@@ -75,13 +75,19 @@ export class PlayerScreen extends Component {
   };
 
   render() {
-    // console.log(this.state.dataSource);
+    // console.log(this.state.dataSource);'
+    console.log("노래 확인해보자", this.props.songId);
     // console.log("노래 데이터 확인", PlayData.song[0]);
     // console.log("노래 물결", PlayData.song[0].wave_data);
 
     const { wave, fill, position, like, dataSource } = this.state;
+    console.log(this.props.setModalVisible);
     return (
-      <TouchZone>
+      <TouchZone
+        onPress={() => {
+          this.props.setModalVisible(false);
+        }}
+      >
         <Container>
           <WaveContainer style={{ marginLeft: position }}>
             <CoverPicture source={{ uri: `${dataSource.big_img_url}` }} />
@@ -164,7 +170,7 @@ export class PlayerScreen extends Component {
                 <ReplyNum>17</ReplyNum>
               </ReplyBox>
               <HeartBox>
-                <Entypo name="share-alternative" size={10} color="white" />
+                <Entypo name="share-alternative" size={20} color="white" />
               </HeartBox>
               <HeartBox>
                 <MaterialCommunityIcons

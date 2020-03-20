@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import {
   View,
@@ -13,23 +13,35 @@ import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import HeaderBar from "../components/HeaderBar";
 import HomeData from "../../Public/Data/Homedata";
-import PlayerBar from "../components/PlayerBar";
-
+import PlayerBar from "./PlayerBar";
 import {
   HeaderBackground,
   GestureHandlerRefContext
 } from "react-navigation-stack";
+import { AuthContext } from "../routes/Context";
+import { useSafeArea } from "react-native-safe-area-context";
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   const [songData, setSongData] = useState([]);
   const [loading, isLoading] = useState(true);
-
+  const [playing, setPlaying] = useState(false);
+  const [artist, setArtist] = useState(null);
+  const [song, setSong] = useState(null);
+  const [songId, setSongId] = useState(null);
+  const [currentSong, setCurrentSong] = useState();
   useEffect(() => {
     console.log("fuck");
     fetch("http://10.58.3.91:8000/song/home/1")
       .then(res => res.json())
       .then(res => setSongData(res.song));
   }, []);
+
+  playSong = data => {
+    const array = [data.song_name, data.song_id, data.artist_name];
+    console.log("클릭 데이터 확인", data);
+    setCurrentSong(array);
+    setPlaying(true);
+  };
 
   if (songData[1] !== undefined) {
     return (
@@ -48,7 +60,7 @@ function HomeScreen() {
                   horizontal
                   data={songData[0].Chill}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => alert("hello")}>
+                    <TouchZone onPress={() => setPlaying(true)}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>
@@ -74,7 +86,7 @@ function HomeScreen() {
                   horizontal
                   data={songData[1].WeWork}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => alert("hello")}>
+                    <TouchZone onPress={() => playSong(item)}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>
@@ -100,7 +112,7 @@ function HomeScreen() {
                   horizontal
                   data={songData[2].GracefulRain}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => alert("hello")}>
+                    <TouchZone onPress={() => isPlaying()}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>
@@ -126,7 +138,7 @@ function HomeScreen() {
                   horizontal
                   data={songData[3].WeWorkout}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => alert("hello")}>
+                    <TouchZone onPress={() => isPlaying()}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>
@@ -152,7 +164,7 @@ function HomeScreen() {
                   horizontal
                   data={songData[4].Wecode}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => alert("hello")}>
+                    <TouchZone onPress={() => isPlaying()}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>
@@ -169,6 +181,7 @@ function HomeScreen() {
             </TagContainer>
           </Container>
         </Body>
+        {playing ? <PlayerBar currentSong={currentSong} /> : null}
       </Wrapper>
     );
   } else {

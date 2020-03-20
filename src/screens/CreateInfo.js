@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import styled from "styled-components";
+import { AuthContext } from "../routes/Context";
 import { theme, flexCenter } from "../components/theme";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -12,7 +13,10 @@ import {
 import Main from "../routes/Main";
 
 const url = "http://10.58.1.163:8000/user/sign-up/app";
+
 export class CreateInfo extends Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +27,11 @@ export class CreateInfo extends Component {
       genderSelected: false
     };
   }
+
+  componentDidMount() {
+    const singIn = this.context;
+  }
+
   checkAge = () => {
     if (this.state.age > 1) {
       this.setState({ validAge: true });
@@ -62,7 +71,8 @@ export class CreateInfo extends Component {
           alert("wrong from frontend");
         }
       })
-      .then(res => console.log(res.token));
+      .then(res => console.log(res.token))
+      .then(this.context.signIn());
   };
 
   render() {

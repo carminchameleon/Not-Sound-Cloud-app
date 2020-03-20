@@ -5,7 +5,7 @@ import {
   useGestureHandlerRef
 } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import { AuthContext } from "./Context";
 import HomeScreen from "../screens/HomeScreen";
 import Welcome from "../screens/Welcome";
 import WelcomeScreen from "../screens/WelcomeScreen";
@@ -16,7 +16,7 @@ import LoadingScreen from "../screens/LoadingScreen";
 import StreamScreen from "../screens/StreamScreen";
 import LibraryScreen from "../screens/LibraryScreen";
 import SearchScreen from "../screens/SearchScreen";
-import PlayerBar from "../components/PlayerBar";
+import PlayerBar from "../screens/PlayerBar";
 import PlayerScreen from "../screens/PlayerScreen";
 
 import { View, Text } from "react-native";
@@ -26,6 +26,7 @@ import { theme, flexCenter } from "../components/theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { HeaderBackground } from "react-navigation-stack";
 
+// 유저 확인 부분
 const AuthStacks = createStackNavigator();
 
 const AuthStackScreen = () => (
@@ -118,34 +119,72 @@ function AppTabScreen() {
 }
 
 const RootStack = createStackNavigator();
-const RootStacksScreen = () => {
+const RootStacksScreen = ({ userToken, isPlaying }) => (
+  <RootStack.Navigator
+    headerMode="none"
+    screenOptions={{ animationEnabled: false }}
+  >
+    {userToken ? (
+      <RootStack.Screen name="AppTabScreen" component={AppTabScreen} />
+    ) : (
+      <RootStack.Screen name="AuthStackScreen" component={AuthStackScreen} />
+    )}
+    <RootStack.Screen name="MusicStackScreen" component={MusicStackScreen} />
+  </RootStack.Navigator>
+);
+
+const MusicStacks = createStackNavigator();
+const MusicStackScreen = () => (
+  <MusicStacks.Navigator mode="modal">
+    <MusicStacks.Screen name="PlayerBar" component={PlayerBar} />
+    <MusicStacks.Screen name="PlayerScreen" component={PlayerScreen} />
+  </MusicStacks.Navigator>
+);
+
+// 최종 랜더 되는 부분
+
+export default () => {
   const [isLoading, setIsLoading] = React.useState(true);
-  const [user, setUser] = React.useState(null);
+  const [userToken, setUserToken] = React.useState(null);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const authContext = React.useMemo(() => {
+    return {
+      signIn: () => {
+        setIsLoading(false);
+        setUserToken("Token");
+      },
+
+      signUp: () => {
+        setIsLoading(false);
+        setUserToken("Token");
+      },
+      signOut: () => {
+        setIsLoading(false);
+        setUserToken(null);
+        setIsPlaying(false);
+      }
+      // isPlaying: () => {
+      //   setIsPlaying(true);
+      // }
+    };
+  }, []);
 
   React.useEffect(() => {
     setTimeout(() => {
-      setIsLoading(!isLoading);
-      setUser({});
-    }, 500);
+      setIsLoading(false);
+    }, 1000);
   }, []);
 
-  return (
-    <RootStack.Navigator headerMode="none">
-      {isLoading ? (
-        <RootStack.Screen name="LoadingScreen" component={LoadingScreen} />
-      ) : user ? (
-        <RootStack.Screen name="AppTabScreen" component={AppTabScreen} />
-      ) : (
-        <RootStack.Screen name="AuthStackScreen" component={AuthStackScreen} />
-      )}
-    </RootStack.Navigator>
-  );
-};
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
-export default () => {
   return (
-    <NavigationContainer>
-      <RootStacksScreen />
-    </NavigationContainer>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        <RootStacksScreen userToken={userToken} />
+        {isPlaying ? <PlayerBar /> : null}
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 };

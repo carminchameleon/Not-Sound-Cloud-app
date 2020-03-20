@@ -21,7 +21,6 @@ import styled, {
   ThemePovider,
   css
 } from "styled-components";
-import PlayerBar from "./src/components/PlayerBar";
 
 import MusicPlayer from "./src/screens/PlayerScreen";
 

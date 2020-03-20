@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { View, TouchableWithoutFeedback } from "react-native";
+import { View, TouchableWithoutFeedback, Button } from "react-native";
 import { theme, flexCenter } from "../components/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-
-function LibraryScreen() {
+import { AuthContext } from "../routes/Context";
+function LibraryScreen({ navigation }) {
+  const { signOut } = React.useContext(AuthContext);
   return (
     <TouchZone>
       <Wrapper>
@@ -20,6 +21,11 @@ function LibraryScreen() {
               </IconBox>
               <IconBox>
                 <Icon>
+                  <Button
+                    title="SignOut"
+                    color="orange"
+                    onPress={() => signOut()}
+                  ></Button>
                   <Feather
                     name="arrow-up-circle"
                     size={24}

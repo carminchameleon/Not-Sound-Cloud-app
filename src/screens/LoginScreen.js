@@ -15,13 +15,14 @@ import {
   Keyboard,
   AsyncStorage
 } from "react-native";
-
+import { AuthContext } from "../routes/Context";
 import styled from "styled-components";
 import { theme, flexCenter } from "../components/theme";
 
 const url = "http://10.58.1.163:8000/user/sign-in";
 
 function CreateAccount({ navigation }) {
+  const { signIn } = React.useContext(AuthContext);
   const [focus, setFocus] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -90,7 +91,8 @@ function CreateAccount({ navigation }) {
         AsyncStorage.getItem("token").then(item => {
           console.log("token", item);
         })
-      );
+      )
+      .then(signIn());
   };
 
   const storeToken = async token => {
@@ -134,7 +136,7 @@ function CreateAccount({ navigation }) {
                 </InputTitleBox>
                 <InputContentsBox>
                   <EmailInput
-                    onFocus={() => setFocus(!focus)}
+                    onFocus={() => setFocus(true)}
                     placeholder="Your email address"
                     returnKeyType={"done"}
                     autoCorrect={false}
@@ -150,7 +152,7 @@ function CreateAccount({ navigation }) {
                 </InputTitleBox>
                 <InputContentsBox>
                   <PWInput
-                    onFocus={() => setFocus(!focus)}
+                    onFocus={() => setFocus(true)}
                     placeholder="Your password"
                     autoCorrect={false}
                     onChangeText={val => {
