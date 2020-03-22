@@ -20,7 +20,7 @@ function WelcomeScreen({ navigation }) {
   return (
     <Container>
       <BackgroundImage
-        source={require("../assets/images/3.jpg")}
+        source={require("../assets/images/2.jpg")}
       ></BackgroundImage>
       <Logo
         source={require("../assets/images/SClogo.png")}
@@ -139,7 +139,7 @@ const SignUp = styled.Text`
 
   font-family: "InterstateRegular";
   color: white;
-  font-size: 18;
+  font-size: 18px;
 `;
 
 const SignInBox = styled.TouchableOpacity`
@@ -166,7 +166,7 @@ const SignIn = styled.Text`
   margin-top: 6px;
   font-family: "InterstateRegular";
   color: rgb(88, 88, 88);
-  font-size: 18;
+  font-size: 18px;
   align-items: center;
   padding: 0;
 `;

@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Main from "../routes/Main";
 
-const url = "http://10.58.1.163:8000/user/sign-up/app";
+const url = "http://10.58.3.91:8000/user/sign-up/app";
 
 export class CreateInfo extends Component {
   static contextType = AuthContext;
@@ -63,7 +63,6 @@ export class CreateInfo extends Component {
     })
       .then(res => {
         if (res.status === 200) {
-          alert("회원가입 성공");
           return res.json();
         } else if (res.status === 500) {
           alert("Wrong from backend");
@@ -83,9 +82,9 @@ export class CreateInfo extends Component {
     const { validAge, genderSelected } = this.state;
     return (
       <TouchZone
-        onPress={() => {
-          Keyboard.dismiss();
-        }}
+      // onPress={() => {
+      //   Keyboard.dismiss();
+      // }}
       >
         <Wrapper>
           <Container>
@@ -197,7 +196,7 @@ const Wrapper = styled.View`
 
 const Container = styled.View`
   background-color: rgb(255, 255, 255);
-  height: 93%;
+  height: 95%;
   width: 100%;
   border-radius: 6px;
   display: flex;

@@ -21,15 +21,11 @@ function LibraryScreen({ navigation }) {
               </IconBox>
               <IconBox>
                 <Icon>
-                  <Button
-                    title="SignOut"
-                    color="orange"
-                    onPress={() => signOut()}
-                  ></Button>
                   <Feather
                     name="arrow-up-circle"
                     size={24}
                     color="rgb(101,101,101)"
+                    onPress={() => signOut()}
                   />
                 </Icon>
               </IconBox>

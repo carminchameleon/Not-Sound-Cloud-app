@@ -30,7 +30,6 @@ function HomeScreen({ navigation }) {
   const [songId, setSongId] = useState(null);
   const [currentSong, setCurrentSong] = useState();
   useEffect(() => {
-    console.log("fuck");
     fetch("http://10.58.3.91:8000/song/home/1")
       .then(res => res.json())
       .then(res => setSongData(res.song));
@@ -60,7 +59,7 @@ function HomeScreen({ navigation }) {
                   horizontal
                   data={songData[0].Chill}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => setPlaying(true)}>
+                    <TouchZone onPress={() => playSong(item)}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>
@@ -112,7 +111,7 @@ function HomeScreen({ navigation }) {
                   horizontal
                   data={songData[2].GracefulRain}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => isPlaying()}>
+                    <TouchZone onPress={() => playSong(item)}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>
@@ -138,7 +137,7 @@ function HomeScreen({ navigation }) {
                   horizontal
                   data={songData[3].WeWorkout}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => isPlaying()}>
+                    <TouchZone onPress={() => playSong(item)}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>

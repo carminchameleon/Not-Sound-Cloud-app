@@ -19,7 +19,7 @@ import { AuthContext } from "../routes/Context";
 import styled from "styled-components";
 import { theme, flexCenter } from "../components/theme";
 
-const url = "http://10.58.1.163:8000/user/sign-in";
+const url = "http://10.58.3.31:8000/user/sign-in";
 
 function CreateAccount({ navigation }) {
   const { signIn } = React.useContext(AuthContext);
@@ -76,14 +76,12 @@ function CreateAccount({ navigation }) {
     })
       .then(res => {
         if (res.status === 200) {
-          alert("login Okay");
-          return res.json();
         } else if (res.status === 500) {
-          alert("Wrong from backend");
+          // alert("Wrong from backend");
         } else if (res.status === 401) {
-          alert("check your Password");
+          // alert("check your Password");
         } else {
-          alert("wrong from frontend");
+          // alert("wrong from frontend");
         }
       })
       .then(response => AsyncStorage.setItem("token", response.user.token))
@@ -188,7 +186,7 @@ const Wrapper = styled.View`
 
 const Container = styled.View`
   background-color: rgb(255, 255, 255);
-  height: 93%;
+  height: 95%;
   width: 100%;
   border-radius: 6px;
   display: flex;

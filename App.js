@@ -23,6 +23,7 @@ import styled, {
 } from "styled-components";
 
 import MusicPlayer from "./src/screens/PlayerScreen";
+import StreamScreen from "./src/screens/StreamScreen";
 
 const getFonts = () =>
   Font.loadAsync({
@@ -44,3 +45,4 @@ export default function App() {
     );
   }
 }
+console.disableYellowBox = true;

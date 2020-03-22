@@ -254,8 +254,8 @@ const WaveContainer = styled.View`
 `;
 
 const CoverPicture = styled.Image`
-  width: 100%;
-  height: 100%;
+  width: 500px;
+  height: 900px;
   opacity: 0.3;
 `;
 

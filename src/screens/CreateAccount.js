@@ -223,7 +223,7 @@ const Wrapper = styled.View`
 
 const Container = styled.View`
   background-color: rgb(255, 255, 255);
-  height: 93%;
+  height: 95%;
   width: 100%;
   border-radius: 6px;
   display: flex;
@@ -382,7 +382,7 @@ const PolicyContainer = styled.View`
   height: 10%;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 3%;
+  margin-bottom: 1%;
 `;
 
 const Policy = styled.Text`
