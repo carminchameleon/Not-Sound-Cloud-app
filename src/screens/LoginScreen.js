@@ -19,10 +19,10 @@ import { AuthContext } from "../routes/Context";
 import styled from "styled-components";
 import { theme, flexCenter } from "../components/theme";
 
-const url = "http://10.58.3.31:8000/user/sign-in";
+const url = "http://10.58.6.99:8000/user/sign-in";
 
 function CreateAccount({ navigation }) {
-  const { signIn } = React.useContext(AuthContext);
+  const { signIn, signOut } = React.useContext(AuthContext);
   const [focus, setFocus] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,21 +76,23 @@ function CreateAccount({ navigation }) {
     })
       .then(res => {
         if (res.status === 200) {
+          // alert("login sucess");
+          signIn();
         } else if (res.status === 500) {
-          // alert("Wrong from backend");
+          alert("Wrong from backend");
+          signOut();
         } else if (res.status === 401) {
-          // alert("check your Password");
+          alert("check your Password");
         } else {
-          // alert("wrong from frontend");
+          alert("wrong from frontend");
         }
       })
       .then(response => AsyncStorage.setItem("token", response.user.token))
       .then(
         AsyncStorage.getItem("token").then(item => {
-          console.log("token", item);
+          console.log("토큰 확인하기", item);
         })
-      )
-      .then(signIn());
+      );
   };
 
   const storeToken = async token => {

@@ -30,7 +30,7 @@ function HomeScreen({ navigation }) {
   const [songId, setSongId] = useState(null);
   const [currentSong, setCurrentSong] = useState();
   useEffect(() => {
-    fetch("http://10.58.3.91:8000/song/home/1")
+    fetch("http://10.58.6.120:8000/song/home/1")
       .then(res => res.json())
       .then(res => setSongData(res.song));
   }, []);
@@ -163,7 +163,7 @@ function HomeScreen({ navigation }) {
                   horizontal
                   data={songData[4].Wecode}
                   renderItem={({ item }) => (
-                    <TouchZone onPress={() => isPlaying()}>
+                    <TouchZone onPress={() => playSong(item)}>
                       <SongBox>
                         <CoverImage source={{ url: `${item.big_img_url}` }} />
                         <SongInfo>

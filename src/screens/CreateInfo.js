@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Main from "../routes/Main";
 
-const url = "http://10.58.3.91:8000/user/sign-up/app";
+const url = "http://10.58.6.99:8000/user/sign-up/app";
 
 export class CreateInfo extends Component {
   static contextType = AuthContext;
@@ -30,6 +30,7 @@ export class CreateInfo extends Component {
 
   componentDidMount() {
     const singIn = this.context;
+    const singOut = this.context;
   }
 
   checkAge = () => {
@@ -66,8 +67,12 @@ export class CreateInfo extends Component {
           return res.json();
         } else if (res.status === 500) {
           alert("Wrong from backend");
+          this.context.signOut();
         } else {
-          alert("wrong from frontend");
+          alert(
+            "We've already signed up that address. Enter a different address or sign in with your password"
+          );
+          this.context.signOut();
         }
       })
       .then(res => console.log(res.token))
@@ -75,16 +80,14 @@ export class CreateInfo extends Component {
   };
 
   render() {
-    console.log("파라미터", this.props.route.params.email);
-    console.log(this.props.navigation);
     const { theme, flexCenter } = { theme, flexCenter };
     const { setInfoVisible, navigation } = this.props;
     const { validAge, genderSelected } = this.state;
     return (
       <TouchZone
-      // onPress={() => {
-      //   Keyboard.dismiss();
-      // }}
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
       >
         <Wrapper>
           <Container>

@@ -12,7 +12,6 @@ import {
 import { theme, flexCenter, ScrollView } from "../components/theme";
 import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Audio, Video } from "expo-av";
 import SongData from "../../Public/Data/SongData";
 import PlatData from "../../Public/Data/PlayData";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -41,7 +40,7 @@ export class PlayerScreen extends Component {
   }
 
   fetchData = () => {
-    fetch(`http://10.58.3.91:8000/song/play/${this.props.songId}`)
+    fetch(`http://10.58.6.120:8000/song/play/${this.props.songId}`)
       .then(response => response.json())
       .then(responseJson =>
         this.setState({
@@ -97,7 +96,7 @@ export class PlayerScreen extends Component {
                   return (
                     <Top
                       style={{
-                        height: bar + 4,
+                        height: bar + 6,
                         alignSelf: "flex-end"
                       }}
                     ></Top>
@@ -118,7 +117,7 @@ export class PlayerScreen extends Component {
                     return (
                       <Top
                         style={{
-                          height: bar + 4,
+                          height: bar + 6,
                           alignSelf: "flex-end",
                           backgroundColor: `${theme.orange}`
                         }}
