@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import styled from "styled-components";
+import { AuthContext } from "../routes/Context";
 import { theme, flexCenter } from "../components/theme";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -11,8 +12,11 @@ import {
 } from "react-native";
 import Main from "../routes/Main";
 
-const url = "http://10.58.1.163:8000/user/sign-in/google";
+const url = "http://10.58.6.99:8000/user/sign-up/app";
+
 export class CreateInfo extends Component {
+  static contextType = AuthContext;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -23,6 +27,12 @@ export class CreateInfo extends Component {
       genderSelected: false
     };
   }
+
+  componentDidMount() {
+    const singIn = this.context;
+    const singOut = this.context;
+  }
+
   checkAge = () => {
     if (this.state.age > 1) {
       this.setState({ validAge: true });
@@ -38,8 +48,8 @@ export class CreateInfo extends Component {
 
   handleSubmit = e => {
     const data = {
-      email: this.props.email,
-      password: this.props.password,
+      email: this.props.route.params.email,
+      password: this.props.route.params.password,
       gender: this.state.gender,
       age: this.state.age
     };
@@ -57,15 +67,19 @@ export class CreateInfo extends Component {
           return res.json();
         } else if (res.status === 500) {
           alert("Wrong from backend");
+          this.context.signOut();
         } else {
-          alert("wrong from frontend");
+          alert(
+            "We've already signed up that address. Enter a different address or sign in with your password"
+          );
+          this.context.signOut();
         }
       })
-      .then(res => console.log(res.token));
+      .then(res => console.log(res.token))
+      .then(this.context.signIn());
   };
 
   render() {
-    console.log(this.props.navigation);
     const { theme, flexCenter } = { theme, flexCenter };
     const { setInfoVisible, navigation } = this.props;
     const { validAge, genderSelected } = this.state;
@@ -79,7 +93,9 @@ export class CreateInfo extends Component {
           <Container>
             <HeaderContainer>
               <CancelContainer>
-                <CancelBox onPress={() => setInfoVisible(false)}>
+                <CancelBox
+                  onPress={() => this.props.navigation.navigate("Welcome")}
+                >
                   <Cancel>Cancel</Cancel>
                 </CancelBox>
               </CancelContainer>
@@ -183,7 +199,7 @@ const Wrapper = styled.View`
 
 const Container = styled.View`
   background-color: rgb(255, 255, 255);
-  height: 93%;
+  height: 95%;
   width: 100%;
   border-radius: 6px;
   display: flex;

@@ -109,7 +109,7 @@ export class CreateAccount extends Component {
           <Container>
             <HeaderContainer>
               <CancelContainer>
-                <CancelBox onPress={() => setModalVisible(false)}>
+                <CancelBox onPress={() => this.props.navigation.pop()}>
                   <Cancel>Cancel</Cancel>
                 </CancelBox>
               </CancelContainer>
@@ -121,7 +121,7 @@ export class CreateAccount extends Component {
                   {validEmail && validPassword ? (
                     <GoNext
                       onPress={() => {
-                        this.setInfoVisible(true);
+                        navigation.push("CreateInfo", { email, password });
                       }}
                     >
                       Next
@@ -205,20 +205,6 @@ export class CreateAccount extends Component {
                   </Policy>
                 </PolicyBox>
               </PolicyContainer>
-              <InfoModal
-                animationType="fade"
-                transparent={true}
-                visible={infoVisible}
-                onRequestClose={() => this.infoVisible(false)}
-              >
-                <CreateInfo
-                  setInfoVisible={this.setInfoVisible}
-                  setModalVisible={this.setModalVisible}
-                  email={email}
-                  password={password}
-                  navigation={navigation}
-                />
-              </InfoModal>
             </BodyContainer>
           </Container>
         </Wrapper>
@@ -237,7 +223,7 @@ const Wrapper = styled.View`
 
 const Container = styled.View`
   background-color: rgb(255, 255, 255);
-  height: 93%;
+  height: 95%;
   width: 100%;
   border-radius: 6px;
   display: flex;
@@ -396,7 +382,7 @@ const PolicyContainer = styled.View`
   height: 10%;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 3%;
+  margin-bottom: 1%;
 `;
 
 const Policy = styled.Text`

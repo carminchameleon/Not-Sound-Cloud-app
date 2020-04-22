@@ -15,13 +15,14 @@ import {
   Keyboard,
   AsyncStorage
 } from "react-native";
-
+import { AuthContext } from "../routes/Context";
 import styled from "styled-components";
 import { theme, flexCenter } from "../components/theme";
 
-const url = "http://10.58.1.163:8000/user/sign-in";
+const url = "http://10.58.6.99:8000/user/sign-in";
 
-function CreateAccount({ setLoginVisible }) {
+function CreateAccount({ navigation }) {
+  const { signIn, signOut } = React.useContext(AuthContext);
   const [focus, setFocus] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,57 +42,58 @@ function CreateAccount({ setLoginVisible }) {
     }
   };
 
-  const loginsubmit = dispatch => {
-    const data = {
-      email: email,
-      password: password
-    };
-    return async data => {
-      try {
-        const response = await url.post(JSON.stringify(data));
-        await AsyncStorage.setItem("token", response.user.token);
-      } catch (err) {
-        dispatch({
-          type: "add_error",
-          payload: "Something wrong with signup"
-        });
-      }
-    };
-  };
-
-  // const handleSubmit = e => {
+  // const loginsubmit = dispatch => {
   //   const data = {
   //     email: email,
   //     password: password
   //   };
-  //   console.log(data);
-  //   fetch(url, {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify(data)
-  //   })
-  //     .then(res => {
-  //       if (res.status === 200) {
-  //         alert("login Okay");
-  //         return res.json();
-  //       } else if (res.status === 500) {
-  //         alert("Wrong from backend");
-  //       } else if (res.status === 401) {
-  //         alert("check your Password");
-  //       } else {
-  //         alert("wrong from frontend");
-  //       }
-  //     })
-  //     .then(response => AsyncStorage.setItem("token", response.user.token))
-  //     .then(
-  //       AsyncStorage.getItem("token").then(item => {
-  //         console.log("token", item);
-  //       })
-  //     );
+  //   return async data => {
+  //     try {
+  //       const response = await url.post(JSON.stringify(data));
+  //       await AsyncStorage.setItem("token", response.user.token);
+  //     } catch (err) {
+  //       dispatch({
+  //         type: "add_error",
+  //         payload: "Something wrong with signup"
+  //       });
+  //     }
+  //   };
   // };
+
+  const handleSubmit = e => {
+    const data = {
+      email: email,
+      password: password
+    };
+    console.log(data);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => {
+        if (res.status === 200) {
+          // alert("login sucess");
+          signIn();
+        } else if (res.status === 500) {
+          alert("Wrong from backend");
+          signOut();
+        } else if (res.status === 401) {
+          alert("check your Password");
+        } else {
+          alert("wrong from frontend");
+        }
+      })
+      .then(response => AsyncStorage.setItem("token", response.user.token))
+      .then(
+        AsyncStorage.getItem("token").then(item => {
+          console.log("토큰 확인하기", item);
+        })
+      );
+  };
 
   const storeToken = async token => {
     try {
@@ -110,7 +112,7 @@ function CreateAccount({ setLoginVisible }) {
         <Container>
           <HeaderContainer>
             <CancelContainer>
-              <CancelBox onPress={() => setLoginVisible(false)}>
+              <CancelBox onPress={() => navigation.pop()}>
                 <Cancel>Cancel</Cancel>
               </CancelBox>
             </CancelContainer>
@@ -119,7 +121,7 @@ function CreateAccount({ setLoginVisible }) {
             </TitleBox>
             <DoneContainer>
               {emailForm && passwordForm ? (
-                <GoDone onPress={handleSubmit}>Done</GoDone>
+                <GoDone onPress={() => handleSubmit()}>Done</GoDone>
               ) : (
                 <Done>Done</Done>
               )}
@@ -134,7 +136,7 @@ function CreateAccount({ setLoginVisible }) {
                 </InputTitleBox>
                 <InputContentsBox>
                   <EmailInput
-                    onFocus={() => setFocus(!focus)}
+                    onFocus={() => setFocus(true)}
                     placeholder="Your email address"
                     returnKeyType={"done"}
                     autoCorrect={false}
@@ -150,7 +152,7 @@ function CreateAccount({ setLoginVisible }) {
                 </InputTitleBox>
                 <InputContentsBox>
                   <PWInput
-                    onFocus={() => setFocus(!focus)}
+                    onFocus={() => setFocus(true)}
                     placeholder="Your password"
                     autoCorrect={false}
                     onChangeText={val => {
@@ -186,7 +188,7 @@ const Wrapper = styled.View`
 
 const Container = styled.View`
   background-color: rgb(255, 255, 255);
-  height: 93%;
+  height: 95%;
   width: 100%;
   border-radius: 6px;
   display: flex;

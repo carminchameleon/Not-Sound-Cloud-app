@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import styled from "styled-components";
 import {
   View,
   TouchableWithoutFeedback,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { theme, flexCenter, ScrollView } from "../components/theme";
-
-function PlayerBar() {
+import PlayerScreen from "../screens/PlayerScreen";
+function PlayerBar(currentSong, { navigation }) {
   const [play, setPlay] = useState(false);
   const [like, setLike] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  console.log("넘어온거", currentSong.currentSong);
+
+  const artist = currentSong.artist_name;
 
   return (
     <BarContainer>
@@ -27,10 +32,10 @@ function PlayerBar() {
           )}
         </PlayBox>
       </PlayWrapper>
-      <TitleWrapper>
+      <TitleWrapper onPress={() => setModalVisible(true)}>
         <TitleBox>
-          <Song>I'm so tired </Song>
-          <Artist>Lauv</Artist>
+          <Song>{currentSong.currentSong[0]} </Song>
+          <Artist>{currentSong.currentSong[2]}</Artist>
         </TitleBox>
       </TitleWrapper>
       <HeartWrapper onPress={() => setLike(!like)}>
@@ -42,6 +47,17 @@ function PlayerBar() {
           )}
         </HeartBox>
       </HeartWrapper>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={() => this.setModalVisible(false)}
+      >
+        <PlayerScreen
+          setModalVisible={setModalVisible}
+          songId={currentSong.currentSong[1]}
+        />
+      </Modal>
     </BarContainer>
   );
 }
@@ -49,8 +65,8 @@ function PlayerBar() {
 export default PlayerBar;
 
 const BarContainer = styled.View`
-  position: absolute;
-  bottom: 10%;
+  /* position: absolute;
+  bottom: 0%; */
   width: 100%;
   height: 45px;
   background-color: rgb(7, 68, 88);
